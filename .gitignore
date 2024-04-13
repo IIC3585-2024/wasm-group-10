@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Wasm
+func/primeFactors.js
+func/primeFactors.wasm
