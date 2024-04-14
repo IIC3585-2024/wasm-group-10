@@ -7,17 +7,20 @@ button?.addEventListener("click", async () => {
     alert("Please enter a valid number");
     return;
   }
-  const primeFactors = Module.cwrap('primeFactors', 'number', ['string', 'number']);
-  const start = performance.now();
-
-  // Allocate space for the size integer that will be updated by the C function
+  
+  // Module.cwrap es una función Emscripten para conectar c/c++ compilados en WebAssembly con js. Mas eficiente que ccall si se quiere haer varios llamados
+  const primeFactors = Module.cwrap('primeFactors', 'number', ['string', 'number']); //nombre de la función, tipo, tipos de los parámetros
+  
+  // Punteros 
   const sizePtr = Module._malloc(4); // 4 bytes for an integer
 
-  // Call the primeFactors function, which returns a pointer to the array of factors
+  // Se llama la función primeFactors. retorna un puntero al array con factores
+  const start = performance.now();
   const ptr = primeFactors(number, sizePtr);
 
-  // Read the size of the array
-  const size = Module.HEAP32[sizePtr >> 2]; // Convert byte offset to index
+  // Es el número de elementos en el array de factores. Se accede a memoria de WebAssembly como un array. Puntero se mueve 4 bytes a la derecha (2^2 = 4 bytes de sizePtr)
+  const size = Module.HEAP32[sizePtr >> 2]; 
+  // Se leen los factores
   const factors = new BigInt64Array(Module.HEAPU64.buffer, ptr, size);
   
   const end = performance.now();

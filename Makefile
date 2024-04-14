@@ -9,7 +9,7 @@ TARGET_JS = func/primeFactors.js
 TARGET_WASM = $(TARGET_JS:.js=.wasm)
 
 # Compiler flags
-EMCC_FLAGS = -s EXPORTED_FUNCTIONS='["_primeFactors","_freeFactors", "_malloc", "_free"]' \
+EMCC_FLAGS = -s EXPORTED_FUNCTIONS='["_primeFactors", "_malloc", "_free"]' \
              -s EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
              -s WASM=1 \
 			 -s WASM_BIGINT # Para soprtar inputs grandes (64 bits) lo cual es importante, pues C puede aguantar, pero hay que indicarle a js también mediante el emcc

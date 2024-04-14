@@ -50,7 +50,3 @@ unsigned long long* primeFactors(const char* n_str, int* size) {
     *size = count;
     return factors;
 }
-
-void freeFactors(unsigned long long* factors) {
-    free(factors);
-}
