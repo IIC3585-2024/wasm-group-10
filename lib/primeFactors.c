@@ -42,11 +42,11 @@ unsigned long long* primeFactors(const char* n_str, int* size) {
         factors[count++] = n;
         
     }
-    printf("Prime factors are: ");
-    for (int i = 0; i < count; i++) {
-        printf("%llu ", factors[i]);
-    }
-    printf("\n");
+    // printf("Prime factors are: ");
+    // for (int i = 0; i < count; i++) {
+    //     printf("%llu ", factors[i]);
+    // }
+    // printf("\n");
     *size = count;
     return factors;
 }
