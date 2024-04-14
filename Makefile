@@ -17,6 +17,17 @@ EMCC_FLAGS = -s EXPORTED_FUNCTIONS='["_primeFactors", "_malloc", "_free"]' \
 # The default target
 all: $(TARGET_JS)
 
+make1: 
+	$(EMCC) $(SRC) -o $(TARGET_JS) $(EMCC_FLAGS)
+
+# Target for O2 optimization
+make2: 
+	$(EMCC) $(SRC) -o $(TARGET_JS) $(EMCC_FLAGS) -O2
+
+# Target for O3 optimization
+make3:
+	$(EMCC) $(SRC) -o $(TARGET_JS) $(EMCC_FLAGS) -O3
+
 # Rule for building the target
 $(TARGET_JS): $(SRC)
 	$(EMCC) $(SRC) -o $(TARGET_JS) $(EMCC_FLAGS)
@@ -25,4 +36,4 @@ $(TARGET_JS): $(SRC)
 clean:
 	rm -f $(TARGET_JS) $(TARGET_WASM)
 
-.PHONY: all clean
+.PHONY: all make1 make2 make3 clean
