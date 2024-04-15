@@ -3,7 +3,7 @@
 # Instrucciones :star:
 
 1. Compilar con `make`
-2. Levantar el servidor con `npm run dev`, `python -m http-server` o con la extensión `live server` de `vscode`
+2. Levantar el servidor con `npm run dev`, `python3 -m http-server` o con la extensión `live server` de `vscode`
 3. Disfrutar! :sparkling_heart:
 
 
