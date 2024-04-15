@@ -20,6 +20,7 @@ all:
 	$(EMCC) $(SRC) -o $(TARGET)O1.js $(EMCC_FLAGS) -O1 -sMODULARIZE=1 -sEXPORT_ES6=1
 	$(EMCC) $(SRC) -o $(TARGET)O2.js $(EMCC_FLAGS) -O2 -sMODULARIZE=1 -sEXPORT_ES6=1
 	$(EMCC) $(SRC) -o $(TARGET)O3.js $(EMCC_FLAGS) -O3 -sMODULARIZE=1 -sEXPORT_ES6=1
+	$(EMCC) $(SRC) -o $(TARGET)Oz.js $(EMCC_FLAGS) -Oz -sMODULARIZE=1 -sEXPORT_ES6=1
 
 default:
 	$(EMCC) $(SRC) -o $(TARGET).js $(EMCC_FLAGS) -sMODULARIZE=1 -sEXPORT_ES6=1
@@ -33,12 +34,15 @@ O2:
 O3:
 	$(EMCC) $(SRC) -o $(TARGET)O3.js $(EMCC_FLAGS) -O3 -sMODULARIZE=1 -sEXPORT_ES6=1
 
+Oz:
+	$(EMCC) $(SRC) -o $(TARGET)Oz.js $(EMCC_FLAGS) -Oz -sMODULARIZE=1 -sEXPORT_ES6=1
+
 # Rule for building the target
 $(TARGET_JS): $(SRC)
 	$(EMCC) $(SRC) -o $(TARGET_JS) $(EMCC_FLAGS)
 
 # Clean target for removing build artifacts
 clean:
-	rm -f $(TARGET).js $(TARGET).wasm $(TARGET)O1.js $(TARGET)O1.wasm $(TARGET)O2.js $(TARGET)O2.wasm $(TARGET)O3.js $(TARGET)O3.wasm
+	rm -f $(TARGET).js $(TARGET).wasm $(TARGET)O1.js $(TARGET)O1.wasm $(TARGET)O2.js $(TARGET)O2.wasm $(TARGET)O3.js $(TARGET)O3.wasm $(TARGET)Oz.js $(TARGET)Oz.wasm
 
 .PHONY: all make1 make2 make3 clean

@@ -3,20 +3,24 @@ import { default as Module } from "./func/primeFactors.js";
 import { default as ModuleO1 } from "./func/primeFactorsO1.js";
 import { default as ModuleO2 } from "./func/primeFactorsO2.js";
 import { default as ModuleO3 } from "./func/primeFactorsO3.js";
+import { default as ModuleOz } from "./func/primeFactorsOz.js";
 
 const wasm = await Module();
 const wasmO1 = await ModuleO1();
 const wasmO2 = await ModuleO2();
 const wasmO3 = await ModuleO3();
+const wasmOz = await ModuleOz();
 
 // Boton y esquema de multiples runs hecho con ayuda de chatGPT
 const button = document.getElementById("prime-factors-button");
 
 button?.addEventListener("click", () => {
+  console.log("-----------------------");
+  console.log("Starting new run");
+  console.log("");
   let number = document.getElementById("number-input")?.value;
   let runs = parseInt(document.getElementById("runs-input")?.value);
 
-  console.log(typeof number);
   if (isNaN(number) || number === "") {
     alert("Please enter a valid number");
     return;
@@ -26,15 +30,14 @@ button?.addEventListener("click", () => {
     return;
   }
 
-  console.log(typeof runs);
-
   const resultJS = jsPrimeFactors(number, runs);
   const resultWasm = wasmPrimeFactors(wasm, number, runs);
   const resultWasmO1 = wasmPrimeFactors(wasmO1, number, runs);
   const resultWasmO2 = wasmPrimeFactors(wasmO2, number, runs);
   const resultWasmO3 = wasmPrimeFactors(wasmO3, number, runs);
+  const resultWasmOz = wasmPrimeFactors(wasmOz, number, runs);
 
-  displayFactors(resultJS, resultWasm, resultWasmO1, resultWasmO2, resultWasmO3);
+  displayFactors(resultJS, resultWasm, resultWasmO1, resultWasmO2, resultWasmO3, resultWasmOz);
 });
 
 function jsPrimeFactors(number, runs) {
@@ -49,7 +52,7 @@ function jsPrimeFactors(number, runs) {
     computeTime += endTime - startTime;
   }
 
-  const avgTime = (computeTime / runs).toFixed(2);
+  const avgTime = (computeTime / runs).toFixed(5);
 
   return { factors, avgTime };
 }
@@ -81,12 +84,12 @@ function wasmPrimeFactors(wasmInstance, number, runs) {
     wasmInstance._free(sizePtr);
   }
 
-  const avgTime = (computeTime / runs).toFixed(2);
+  const avgTime = (computeTime / runs).toFixed(5);
 
   return { factors, avgTime };
 }
 
-function displayFactors(resultJS, resultWasm, resultWasmO1, resultWasmO2, resultWasmO3) {
+function displayFactors(resultJS, resultWasm, resultWasmO1, resultWasmO2, resultWasmO3, resultWasmOz) {
   const resultContainer = document.getElementById("result-container");
   resultContainer.innerHTML = `
     <p>JavaScript Prime Factors: [${resultJS.factors.join(", ")}] - Computation Time: ${resultJS.avgTime} ms</p>
@@ -101,6 +104,9 @@ function displayFactors(resultJS, resultWasm, resultWasmO1, resultWasmO2, result
   } ms</p>
   <p>WASM O3 Prime Factors: [${Array.from(resultWasmO3.factors).join(", ")}] - Computation Time: ${
     resultWasmO3.avgTime
+  } ms</p>
+  <p>WASM Oz Prime Factors: [${Array.from(resultWasmO3.factors).join(", ")}] - Computation Time: ${
+    resultWasmOz.avgTime
   } ms</p>
   `;
 }
