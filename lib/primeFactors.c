@@ -7,7 +7,6 @@
 unsigned long long* primeFactors(const char* n_str, int* size) {
     unsigned long long n = strtoull(n_str, NULL, 10); //convierte una cadena (array de caracteres, char*) a un número de tipo unsigned long long hasta encontrar NULL. Usa base 10
 
-    printf("Starting prime factorization of %llu\n", n);
     int arraySize = 5;
     unsigned long long* factors = malloc(arraySize * sizeof(unsigned long long));
     int count = 0; 
