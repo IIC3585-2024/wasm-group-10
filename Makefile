@@ -16,22 +16,22 @@ EMCC_FLAGS = -s EXPORTED_FUNCTIONS='["_primeFactors", "_malloc", "_free"]' \
 			 -s WASM_BIGINT # Para soprtar inputs grandes (64 bits) lo cual es importante, pues C puede aguantar, pero hay que indicarle a js también mediante el emcc
 
 all: 
-	$(EMCC) $(SRC) -o $(TARGET).js $(EMCC_FLAGS)
-	$(EMCC) $(SRC) -o $(TARGET)O1.js $(EMCC_FLAGS) -O1
-	$(EMCC) $(SRC) -o $(TARGET)O2.js $(EMCC_FLAGS) -O2
-	$(EMCC) $(SRC) -o $(TARGET)O3.js $(EMCC_FLAGS) -O3
+	$(EMCC) $(SRC) -o $(TARGET).js $(EMCC_FLAGS) -sMODULARIZE=1 -sEXPORT_ES6=1
+	$(EMCC) $(SRC) -o $(TARGET)O1.js $(EMCC_FLAGS) -O1 -sMODULARIZE=1 -sEXPORT_ES6=1
+	$(EMCC) $(SRC) -o $(TARGET)O2.js $(EMCC_FLAGS) -O2 -sMODULARIZE=1 -sEXPORT_ES6=1
+	$(EMCC) $(SRC) -o $(TARGET)O3.js $(EMCC_FLAGS) -O3 -sMODULARIZE=1 -sEXPORT_ES6=1
 
 default:
-	$(EMCC) $(SRC) -o $(TARGET).js $(EMCC_FLAGS)
+	$(EMCC) $(SRC) -o $(TARGET).js $(EMCC_FLAGS) -sMODULARIZE=1 -sEXPORT_ES6=1
 
 O1:
-	$(EMCC) $(SRC) -o $(TARGET)O1.js $(EMCC_FLAGS) -O1
+	$(EMCC) $(SRC) -o $(TARGET)O1.js $(EMCC_FLAGS) -O1 -sMODULARIZE=1 -sEXPORT_ES6=1
 
 O2:
-	$(EMCC) $(SRC) -o $(TARGET)O2.js $(EMCC_FLAGS) -O2
+	$(EMCC) $(SRC) -o $(TARGET)O2.js $(EMCC_FLAGS) -O2 -sMODULARIZE=1 -sEXPORT_ES6=1
 
 O3:
-	$(EMCC) $(SRC) -o $(TARGET)O3.js $(EMCC_FLAGS) -O3
+	$(EMCC) $(SRC) -o $(TARGET)O3.js $(EMCC_FLAGS) -O3 -sMODULARIZE=1 -sEXPORT_ES6=1
 
 # Rule for building the target
 $(TARGET_JS): $(SRC)
