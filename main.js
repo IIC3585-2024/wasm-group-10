@@ -28,45 +28,58 @@ button?.addEventListener("click", () => {
 
   console.log(typeof runs);
 
-  let factorsJS, factorsWASM;
-  let computeTimeJS = 0;
-  let computeTimeWASM = 0;
+  const resultJS = jsPrimeFactors(number, runs);
+  const resultWASM = wasmPrimeFactors(wasm, number, runs);
+
+  displayFactors(resultJS.factors, resultJS.avgTime, resultWASM.factors, resultWASM.avgTime);
+});
+
+function jsPrimeFactors(number, runs) {
+  let factors;
+  let computeTime = 0;
 
   for (let i = 0; i < runs; i++) {
-    let startJS = performance.now();
-    factorsJS = primeFactorsJS(Number(number));
-    let endJS = performance.now();
-    computeTimeJS += endJS - startJS;
+    let startTime = performance.now();
+    factors = primeFactorsJS(Number(number));
+    let endTime = performance.now();
+    computeTime += endTime - startTime;
   }
 
-  /////////////////////////////////////////////////////////////////////////////////////.C
+  const avgTime = (computeTime / runs).toFixed(2);
+
+  return { factors, avgTime };
+}
+
+function wasmPrimeFactors(wasmInstance, number, runs) {
   // Module.cwrap es una función Emscripten para conectar c/c++ compilados en WebAssembly con js. Mas eficiente que ccall si se quiere haer varios llamados
-  let primeFactors = wasm.cwrap("primeFactors", "number", ["string", "number"]); //nombre de la función, tipo, tipos de los parámetros
+  let primeFactors = wasmInstance.cwrap("primeFactors", "number", ["string", "number"]); //nombre de la función, tipo, tipos de los parámetros
+  let computeTime = 0;
+  let factors;
+
   for (let i = 0; i < runs; i++) {
     // Punteros
-    const sizePtr = wasm._malloc(4); // 4 bytes for an integer
+    const sizePtr = wasmInstance._malloc(4); // 4 bytes for an integer
 
     // Se llama la función primeFactors. retorna un puntero al array con factores
-    let startWASM = performance.now();
+    let startTime = performance.now();
     const ptr = primeFactors(number, sizePtr);
 
     // Es el número de elementos en el array de factores. Se accede a memoria de WebAssembly como un array. Puntero se mueve 4 bytes a la derecha (2^2 = 4 bytes de sizePtr)
-    const size = wasm.HEAP32[sizePtr >> 2];
+    const size = wasmInstance.HEAP32[sizePtr >> 2];
     // Se leen los factores
-    factorsWASM = new BigInt64Array(wasm.HEAPU64.buffer, ptr, size);
+    factors = new BigInt64Array(wasmInstance.HEAPU64.buffer, ptr, size);
 
-    let endWASM = performance.now();
-    computeTimeWASM += endWASM - startWASM;
+    let endTime = performance.now();
+    computeTime += endTime - startTime;
 
-    wasm._free(ptr);
-    wasm._free(sizePtr);
+    wasmInstance._free(ptr);
+    wasmInstance._free(sizePtr);
   }
 
-  /////////////////////////////////////////////////////////////////////////////////////.C
-  const avgJS = (computeTimeJS / runs).toFixed(2);
-  const avgWASM = (computeTimeWASM / runs).toFixed(2);
-  displayFactors(factorsJS, avgJS, factorsWASM, avgWASM);
-});
+  const avgTime = (computeTime / runs).toFixed(2);
+
+  return { factors, avgTime };
+}
 
 function displayFactors(factorsJS, avgJS, factorsWASM, avgWASM) {
   const resultContainer = document.getElementById("result-container");
