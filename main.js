@@ -1,6 +1,6 @@
 import { primeFactorsJS } from './lib/primeFactors.js';
 
-// Botones y esquema de multiples runs hecho con ayuda de chatGPT
+// Boton y esquema de multiples runs hecho con ayuda de chatGPT
 const button = document.getElementById("prime-factors-button");
 
 button?.addEventListener("click", async () => {
@@ -50,13 +50,12 @@ button?.addEventListener("click", async () => {
   
   let endWASM = performance.now();
   computeTimeWASM += (endWASM - startWASM);
-  /////////////////////////////////////////////////////////////////////////////////////.C
 
-  // Free the allocated memory for the array and the size integer
   Module._free(ptr);
   Module._free(sizePtr);
   }
-
+  
+  /////////////////////////////////////////////////////////////////////////////////////.C
   const avgJS = (computeTimeJS / runs).toFixed(2);
   const avgWASM = (computeTimeWASM / runs).toFixed(2);
   displayFactors(factorsJS, avgJS, factorsWASM, avgWASM);
